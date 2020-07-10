@@ -1,7 +1,7 @@
-var express = require("express");
-var app = express();
-
-var bodyParser = require('body-parser')
+var express     = require("express"),
+    app         = express(),
+    bodyParser  = require('body-parser'),
+    mongoose    = require("mongoose");
 
 //server these folders
 app.use(express.static("views"));
@@ -9,24 +9,32 @@ app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({extended: true}));
 
+//mongodb database
+mongoose.connect("mongodb://localhost/robots");
 
-var robots = [
-    {name:"Rocky", image: "https://images.unsplash.com/photo-1546776310-eef45dd6d63c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=739&q=80"},
-    {name: "BB-8", image: "https://images.unsplash.com/photo-1592513809429-4a3458537099?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
-    {name: "Wall-E", image: "https://images.unsplash.com/photo-1563207153-f403bf289096?ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80"},
-    {name: "EVE", image: "https://images.unsplash.com/photo-1535378620166-273708d44e4c?ixlib=rb-1.2.1&auto=format&fit=crop&w=866&q=80"},
-    {name:"C-ePO", image:"https://images.unsplash.com/photo-1581481615985-ba4775734a9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=675&q=80"},
-    {name:"Rocky", image: "https://images.unsplash.com/photo-1546776310-eef45dd6d63c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=739&q=80"},
-    {name: "BB-8", image: "https://images.unsplash.com/photo-1592513809429-4a3458537099?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
-    {name: "Wall-E", image: "https://images.unsplash.com/photo-1563207153-f403bf289096?ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80"},
-    {name: "EVE", image: "https://images.unsplash.com/photo-1535378620166-273708d44e4c?ixlib=rb-1.2.1&auto=format&fit=crop&w=866&q=80"},
-    {name:"C-ePO", image:"https://images.unsplash.com/photo-1581481615985-ba4775734a9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=675&q=80"}
-]
+//shema setup
+var robot_schema = new mongoose.Schema(
+    {
+        name: String,
+        image: String
+    }
+);
+
+//create model of our schema
+var Robot = mongoose.model("Robot", robot_schema);
+
+
 
 app.get("/robots", function(req,res){
-
-    res.render("robots.ejs", {robots: robots});
-
+       
+    //retrieve robots from db
+    Robot.find({},function(err, robots){
+        if(err) return console.log(err);
+        else{
+            res.render("robots.ejs", {robots: robots});
+        }
+    })
+    
 });
 
 
@@ -43,13 +51,21 @@ app.post("/robots", function(req, res){
     let name = req.body.name;
     let image = req.body.image;
 
-    let newRobot = {name: "", image:""};
-    if (name == "" || image == "") {
-        newRobot = robots[Math.floor(Math.random() * robots.length)]
-    } else {
-        newRobot = {name: name, image:image};
+    if(name == "" || image == "")
+    {
+        res.redirect("/robots/new");
+        return;
     }
-    robots.push(newRobot);
+
+    let newRobot = {name: name, image: image};
+
+    //database
+    //save robots
+    Robot.create(newRobot), function(error, bot){
+        if(error)   return console.log(error);
+        else    console.log(bot);
+    };
+
     //redirect back to robots page
     res.redirect("/robots");
 });
