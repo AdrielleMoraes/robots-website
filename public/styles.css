@@ -5,3 +5,58 @@ body{
 p{
     color: black;
 }
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;            /* Footer height */
+    background:rgb(153, 153, 153);
+  }
+
+.page-container {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom:60px;   /* Height of the footer */
+  }
+
+  textarea{
+    resize: none;
+  }
+
+  .comment-text{
+    background-color: rgb(197, 197, 197);
+    border-radius: 10px;
+    width: 100%;
+    margin-left: 10px;
+  }
+
+  .comment-photo{
+    margin: auto;
+  }
+
+  .comment-photo img{
+    width: 70px;
+    height: auto;
+  }
+  .comment{
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  .comment-inner{
+    margin: 0.5em;
+  }
+
+  .comment-author{
+    color: rgb(0, 0, 112);
+    font-weight: 700;
+  }
+
+  .deleteForm{
+    display: inline;
+  }
+
+  .display-left{
+    float: right;
+  }

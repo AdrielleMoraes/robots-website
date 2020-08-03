@@ -2,7 +2,12 @@
     <%- include("partials/header.ejs"); %>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h1 class="display-4">Welcome to our list of robots</h1>
+            <% if(!currentUser){ %>
+                <h1 class="display-4">Welcome to our list of robots</h1>
+            <%}else{%>
+                <h1 class="display-4"><%- currentUser.username.toUpperCase() %>, check out our list of robots</h1>
+            <% } %>
+            
             <p class="lead">View our list of custom built robots</p>
             <p>
                 <a class="btn btn-primary btn-lg" href="/robots/new" role="button">Get Started!</a>

@@ -28,13 +28,19 @@
             </div>
 
             <div class=" my-2 my-lg-0">
-                <a class="btn btn-outline-primary my-2 my-sm-0" href="/robots/" role="button">Log in</a>
-                <a class="btn btn-outline-success my-2 my-sm-0" href="/robots/new" role="button">Sign up</a>
-                <a class="btn btn-outline-danger my-2 my-sm-0" href="/robots/new" role="button">Log out</a>
+                <% if(!currentUser){ %>
+                    <a class="btn btn-outline-primary my-2 my-sm-0" href="/login" role="button">Log in</a>
+                    <a class="btn btn-outline-success my-2 my-sm-0" href="/register" role="button">Sign up</a>
+                <%}else{%>
+                    <a class="my-2 my-sm-0" href="#">Signed in as <%- currentUser.username %></a>
+                    <a class="btn btn-outline-danger my-2 my-sm-0" href="/logout" role="button">Log out</a>
+                <% } %>
+                
             </div>
 
         </div>
         
     </nav>
 
-    <div class="container">
+    <div class="page-container">
+        <div class="container">

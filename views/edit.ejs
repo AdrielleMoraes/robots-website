@@ -1,0 +1,34 @@
+<%- include("partials/header.ejs");%> 
+
+
+<h1>Edit <%= robot.name%></h1>
+<!-- update robot info -->
+<form action="/robots/<%= robot._id%>?_method=PUT" method="POST">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input name="robot[name]" class="form-control" id="name" aria-describedby="emailHelp" value="<%= robot.name%>">
+    </div>
+    <div class="form-group">
+      <label for="image">Image</label>
+      <input name="robot[image]" class="form-control" id="image" value="<%= robot.image%>">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input name="robot[description]" class="form-control" id="description" value="<%= robot.description%>">
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+    
+</form>
+
+
+<div  class="mt-3 display-left"> 
+    <a class="btn btn-primary" href="/" role="button">Back</a>
+
+    <!-- delete robot -->
+    <form class="deleteForm " action="/robots/<%=robot._id%>?_method=DELETE" method="POST">
+        <button class="btn btn-danger text-right">Delete</button>
+    </form>
+
+</div>
+
+<%- include("partials/footer.ejs"); %> 
