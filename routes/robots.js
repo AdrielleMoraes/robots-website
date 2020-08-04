@@ -36,30 +36,12 @@ router.get("/:robotId", function(req,res){
 
 
 // edit robot
-router.get("/:id/edit", (req,res)=>{
-    //is user logged in?
-        if(req.isAuthenticated())
-        {
-            //find robot
-            Robot.findById(req.params.id, (error, foundRobot)=>{
-            if(error){
-                res.redirect("/");
-            }
-            else{
-                //does user keep robot?
-                console.log(foundRobot);
-                if(foundRobot.author.id.equals(req.user._id))
-                    res.render("edit.ejs", {robot: foundRobot});
-                else{
-                    res.send("you do not have permission to do that");
-                }
-            }
-                
-            });
-        }
-        else{
-            res.redirect("/login");
-        }
+router.get("/:id/edit", checkOwnership, (req,res)=>{
+    //find robot
+    Robot.findById(req.params.id, (error, foundRobot)=>{
+        //show edit page
+        res.render("edit.ejs", {robot: foundRobot});          
+    });
 });
 
 //post requests
@@ -106,7 +88,7 @@ router.put("/:id", (req,res)=>{
 });
 
 // destroy robot
-router.delete("/:id", async(req,res)=>{
+router.delete("/:id",checkOwnership, async(req,res)=>{
     try {
         let foundRobot = await Robot.findById(req.params.id);
         await foundRobot.remove();
@@ -123,6 +105,30 @@ function isLoggedIn(req,res,next){
         return next();
     }
     res.redirect("/login");
+}
+
+//middleware to check if user has authorisation to edit robot
+function checkOwnership(req,res,next){
+    //is user logged in?
+    if(req.isAuthenticated())
+    {
+        //find robot
+        Robot.findById(req.params.id, (error, foundRobot)=>{
+        if(error){
+            res.redirect("back");
+        }
+        else{
+            //does user keep robot?
+            if(foundRobot.author.id.equals(req.user._id))
+                return next();
+            else{
+                res.redirect("back");
+            }
+        }           
+        });
+    }
+    else
+        res.redirect("/login");
 }
 
 module.exports = router;

@@ -22,7 +22,7 @@
 
 
 <div  class="mt-3 display-left"> 
-    <a class="btn btn-primary" href="/" role="button">Back</a>
+  <button type="submit" class="btn btn-primary" onclick="history.go(-1)">Back</button>
 
     <!-- delete robot -->
     <form class="deleteForm " action="/robots/<%=robot._id%>?_method=DELETE" method="POST">

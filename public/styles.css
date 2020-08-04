@@ -2,10 +2,6 @@ body{
     font-family: 'Montserrat', sans-serif;
 }
 
-p{
-    color: black;
-}
-
 #footer {
     position: absolute;
     bottom: 0;
@@ -53,10 +49,30 @@ p{
     font-weight: 700;
   }
 
-  .deleteForm{
+  .deleteForm, .comment-options{
     display: inline;
   }
 
   .display-left{
     float: right;
+  }
+
+  .comment-option{
+    font-size: 14px;
+    border-color: #1172c4;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 3px 6px;
+    background-color: transparent;
+    color: #007bff;
+    margin: 2px;
+  }
+
+  .comment-option:hover {
+    color: white;
+    background: #1172c4;
+    border-color: none;
+    transition: all 0.2s linear;
+    text-decoration: none;
   }
