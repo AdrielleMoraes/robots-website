@@ -14,6 +14,7 @@ body{
     position: relative;
     min-height: 100vh;
     padding-bottom:60px;   /* Height of the footer */
+    margin-top: 10px;
   }
 
   textarea{

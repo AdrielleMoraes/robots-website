@@ -16,6 +16,11 @@ middlewareObj.checkOwnership = function(req,res,next){
             res.redirect("back");
         }
         else{
+            // check if robot exists
+            if(!foundRobot){
+                req.flash("error", "Item not found");
+                return res.redirect("back");
+            }
             //does user keep robot?
             if(foundRobot.author.id.equals(req.user._id))
                 return next();
@@ -42,6 +47,10 @@ middlewareObj.checkCommentOwnership = function(req,res,next){
             res.redirect("back");
         }
         else{
+            if(!foundComment){
+                req.flash("error", "Item not found");
+                return res.redirect("back");
+            }
             //does user keep robot?
             if(foundComment.author.id.equals(req.user._id))
                 return next();

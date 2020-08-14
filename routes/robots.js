@@ -30,6 +30,10 @@ router.get("/:robotId", function(req,res){
     Robot.findById(req.params.robotId).populate("comments").exec(function(error, robot){
         if(error)   console.log(error);
         else{
+            if(!robot){
+                req.flash("error", "Item not found");
+                return res.redirect("back");
+            }
             res.render("show.ejs", {robot : robot});
         }
     }); 
@@ -40,6 +44,10 @@ router.get("/:robotId", function(req,res){
 router.get("/:id/edit", middleware.checkOwnership, (req,res)=>{
     //find robot
     Robot.findById(req.params.id, (error, foundRobot)=>{
+        if(!foundRobot){
+            req.flash("error", "Item not found");
+            return res.redirect("back");
+        }
         //show edit page
         res.render("edit.ejs", {robot: foundRobot});          
     });

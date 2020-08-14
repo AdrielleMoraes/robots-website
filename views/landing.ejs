@@ -1,18 +1,27 @@
 
     <%- include("partials/header.ejs"); %>
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
+
+    <link rel="stylesheet" href="/landing.css">
+
+    <div id="landing-header" class="container">
             <% if(!currentUser){ %>
-                <h1 class="display-4">Welcome to our list of robots</h1>
+                <h1 class="landing-header display-4">Welcome to our list of robots</h1>
             <%}else{%>
-                <h1 class="display-4"><%- currentUser.username.toUpperCase() %>, check out our list of robots</h1>
+                <h1 class="landing-header display-4"><%- currentUser.username.toUpperCase() %>, check out our list of robots</h1>
             <% } %>
             
-            <p class="lead">View our list of custom built robots</p>
+            <h2 class="landing-header ">View our list of custom built robots</h2>
             <p>
-                <a class="btn btn-primary btn-lg" href="/robots/new" role="button">Get Started!</a>
+                <a class="btn btn-success " href="/robots/new" role="button">Get Started!</a>
             </p>
-        </div>
     </div>
+
+    <ul class="slideshow">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
     
     <%- include("partials/footer.ejs"); %>
