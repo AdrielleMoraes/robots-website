@@ -5,12 +5,11 @@
 
     <div id="landing-header" class="container">
             <% if(!currentUser){ %>
-                <h1 class="landing-header display-4">Welcome to our list of robots</h1>
+                <h1 class="landing-header">Welcome to our list of robots</h1>
+                <h2 class="landing-header ">View our robots selection</h2>
             <%}else{%>
-                <h1 class="landing-header display-4"><%- currentUser.username.toUpperCase() %>, check out our list of robots</h1>
+                <h1 class="landing-header"><%- currentUser.username.toUpperCase() %>, check out our list of robots</h1>
             <% } %>
-            
-            <h2 class="landing-header ">View our list of custom built robots</h2>
             <p>
                 <a class="btn btn-success " href="/robots/new" role="button">Get Started!</a>
             </p>
