@@ -76,3 +76,7 @@ body{
     transition: all 0.2s linear;
     text-decoration: none;
   }
+
+  .flash-message{
+    margin-top: 10px;
+  }

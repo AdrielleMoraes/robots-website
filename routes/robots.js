@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Robot = require("../models/robot");
+var middleware = require("../middleware");
 
 
 //get requests
@@ -19,7 +20,7 @@ router.get("/", function(req,res){
 });
 
 //new robot
-router.get("/new", isLoggedIn, function(req,res){
+router.get("/new", middleware.isLoggedIn, function(req,res){
     res.render("new.ejs");
 });
 
@@ -36,7 +37,7 @@ router.get("/:robotId", function(req,res){
 
 
 // edit robot
-router.get("/:id/edit", checkOwnership, (req,res)=>{
+router.get("/:id/edit", middleware.checkOwnership, (req,res)=>{
     //find robot
     Robot.findById(req.params.id, (error, foundRobot)=>{
         //show edit page
@@ -46,10 +47,11 @@ router.get("/:id/edit", checkOwnership, (req,res)=>{
 
 //post requests
 //create new robot
-router.post("/new", isLoggedIn, function(req, res){
+router.post("/new", middleware.isLoggedIn, function(req, res){
     //get data from form and add to database
     if(req.body.robot.name == "" || req.body.robot.image == "")
     {
+        req.flash("error", "These fields are mandatory");
         res.redirect("/robots/new");
         return;
     }
@@ -69,66 +71,38 @@ router.post("/new", isLoggedIn, function(req, res){
         }
     });
     //redirect back to robots page
+    req.flash("success", "Brand new robot included to our database");
     res.redirect("/");
 });
 
 //edit robot
-
-router.put("/:id", (req,res)=>{
+router.put("/:id", middleware.checkOwnership, (req,res)=>{
     //find and update robot
     Robot.findByIdAndUpdate(req.params.id, req.body.robot, (error, updatedRobot)=>{
         if (error){
+            req.flash("error", "Something went wrong");
             res.redirect("/");
         }
         //redirect to showpage
         else
+            req.flash("success", "Robot " + updatedRobot.name +" updated succesfully");
             res.redirect("/robots/"+req.params.id);
     });
     
 });
 
 // destroy robot
-router.delete("/:id",checkOwnership, async(req,res)=>{
+router.delete("/:id", middleware.checkOwnership, async(req,res)=>{
     try {
         let foundRobot = await Robot.findById(req.params.id);
         await foundRobot.remove();
+        req.flash("success", "Robot deleted succesfully");
         res.redirect("/robots");
       } catch (error) {
         console.log(error.message);
+        req.flash("error", "Something went wrong");
         res.redirect("/robots");
       }
 });
-
-//middleware to check if user is logged in
-function isLoggedIn(req,res,next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
-
-//middleware to check if user has authorisation to edit robot
-function checkOwnership(req,res,next){
-    //is user logged in?
-    if(req.isAuthenticated())
-    {
-        //find robot
-        Robot.findById(req.params.id, (error, foundRobot)=>{
-        if(error){
-            res.redirect("back");
-        }
-        else{
-            //does user keep robot?
-            if(foundRobot.author.id.equals(req.user._id))
-                return next();
-            else{
-                res.redirect("back");
-            }
-        }           
-        });
-    }
-    else
-        res.redirect("/login");
-}
 
 module.exports = router;

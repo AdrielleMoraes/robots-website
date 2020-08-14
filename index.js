@@ -2,6 +2,8 @@ var express         = require("express"), //server side
     app             = express(),
     bodyParser      = require('body-parser'),
 
+    //flash messages
+    flash = require("connect-flash");
     //put request 
     methodOverride= require("method-override");
 
@@ -27,6 +29,9 @@ var robotsRoutes = require("./routes/robots"),
 //mongodb database
 mongoose.connect("mongodb://localhost/robots", { useUnifiedTopology: true, useNewUrlParser: true});
 
+
+//flash messages config
+app.use(flash());
 
 //run this to restart db and populate examples
 //seedDB();
@@ -60,6 +65,8 @@ passport.deserializeUser(User.deserializeUser());//decode session
 // use this to correct navbar login buttons issue
 app.use((req,res, next)=>{
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
     next();
 })
 
