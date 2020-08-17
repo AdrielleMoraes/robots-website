@@ -81,3 +81,17 @@ body{
   .flash-message{
     margin-top: 10px;
   }
+
+  .robot-info{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+.form-group img{
+width: 10%;
+display: block;
+margin-bottom: 10px;
+}
+.robot-image img{
+  max-width: 30%;
+}

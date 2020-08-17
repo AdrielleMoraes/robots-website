@@ -4,6 +4,32 @@ var Robot = require("../models/robot");
 var middleware = require("../middleware");
 
 
+
+//environment variables
+const dotenv = require('dotenv');
+dotenv.config();
+
+//upload images
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: "demo",
+    allowedFormats: ["jpg", "png"],
+    transformation: [{ width: 500, height: 500, crop: "limit" }]
+});
+
+const parser = multer({ storage: storage });
+
+
 //get requests
 
 //list all robots
@@ -55,9 +81,11 @@ router.get("/:id/edit", middleware.checkOwnership, (req,res)=>{
 
 //post requests
 //create new robot
-router.post("/new", middleware.isLoggedIn, function(req, res){
+router.post("/new", [middleware.isLoggedIn, parser.single("robot[image]")], function(req, res){
+    //console.log(req.file) // to see what is returned to you
+
     //get data from form and add to database
-    if(req.body.robot.name == "" || req.body.robot.image == "")
+    if(req.body.robot.name == "" || !req.file )
     {
         req.flash("error", "These fields are mandatory");
         res.redirect("/robots/new");
@@ -75,6 +103,8 @@ router.post("/new", middleware.isLoggedIn, function(req, res){
                 id: req.user._id
             }
             bot.author = author;
+            //assign image
+            bot.image = req.file.path;
             bot.save();
         }
     });
@@ -84,7 +114,7 @@ router.post("/new", middleware.isLoggedIn, function(req, res){
 });
 
 //edit robot
-router.put("/:id", middleware.checkOwnership, (req,res)=>{
+router.put("/:id", [middleware.checkOwnership, parser.single("robot[image]")], (req,res)=>{
     //find and update robot
     Robot.findByIdAndUpdate(req.params.id, req.body.robot, (error, updatedRobot)=>{
         if (error){
