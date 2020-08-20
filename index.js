@@ -14,7 +14,7 @@ var express         = require("express"), //server side
     User            = require("./models/user.js")
     seedDB          =  require("./seeds"),
 
-    //user authentication
+    //user authentication passport
     passport        = require("passport"),
     LocalStrategy   = require("passport-local"),
     passportLocalM  = require("passport-local-mongoose");
