@@ -82,8 +82,9 @@ app.get("/*",function(req,res){
     res.render("landing.ejs");
 });
 
+const PORT = process.env.PORT || 3000;
 
-app.listen(3000,function(){
+app.listen(PORT,()=>{
 
     console.log("Server started");
 });
