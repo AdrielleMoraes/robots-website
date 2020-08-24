@@ -28,7 +28,7 @@ var robotsRoutes = require("./routes/robots"),
 
 //mongodb database
 //mongoose.connect("mongodb://localhost/robots", { useUnifiedTopology: true, useNewUrlParser: true});
-mongoose.connect("mongodb+srv://adriellemaster:" + process.env.MONGODB_PASSWORD + "@" + process.env.MONGODB_CLUSTERNAME + ".scndl.mongodb.net/cluster0?retryWrites=true&w=majority", { 
+mongoose.connect("mongodb+srv://" + process.env.MONGODB_USER + ":" + process.env.MONGODB_PASSWORD + "@" + process.env.MONGODB_CLUSTERNAME + ".scndl.mongodb.net/cluster0?retryWrites=true&w=majority", { 
     useUnifiedTopology: true, 
     useNewUrlParser: true}).then(()=>{
         console.log("Connected to mongoDB atlas");
